@@ -13,6 +13,7 @@ Por: HJulian Mejia (@stereohj)
 # * Módulos de "cryptography"
 from cryptography.hazmat.primitives.asymmetric import rsa   # Entorno de algoritmo RSA
 from cryptography.hazmat.primitives import serialization    # Entorno de serialización ("codificación")
+from cryptography.hazmat.primitives import hashes           # Entorno de funciones resumen (hash)
 
 
 # ---- Funciones ---- #
@@ -71,4 +72,35 @@ def gen_rsa_keys(pub_exp: int = 65537,
     pub_key = priv_key.public_key()
 
     return priv_key, pub_key
+
+# ------------------------------------------------------------------------------------------ #
+
+def gen_sha2(message: str, to_bytes: bool = False) -> str|bytes:
+    
+
+    """Generate a SHA-256 digest.
+
+    Args:
+        message (str): Data to be hashed.
+        to_bytes (bool): Data digest returned as a bytes object. Defaults to `False`.
+
+    Returns:
+        str|bytes: The 256-bits Hex string digest of the data.
+    """
+    
+    # Es necesario convertir al tipo "bytes" la cadena para su procesamiento
+    b_message = bytes(message, 'utf-8')
+    
+    digest = hashes.Hash(hashes.SHA256())
+    digest.update(b_message)
+    
+    if(to_bytes):
+        return digest.finalize()
+    else:
+        return digest.finalize().hex()
+
+# ------------------------------------------------------------------------------------------ #
+
+
+
 
